@@ -1,0 +1,20 @@
+RewriteEngine On
+RewriteBase /
+
+# Запрещаем доступ к служебным директориям
+RewriteRule ^includes/ - [F,L]
+RewriteRule ^vendor/ - [F,L]
+
+# Разрешаем доступ к ресурсам
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# ЧПУ для предметов и уроков
+RewriteRule ^subject/([^/]+)/?$ index.php?page=subject&slug=$1 [L,QSA]
+RewriteRule ^lesson/(\d+)/?$ index.php?page=lesson&id=$1 [L,QSA]
+
+# Перенаправление всех остальных запросов на index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?page=$1 [L,QSA]
